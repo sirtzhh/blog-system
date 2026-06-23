@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>远眺的卧狮 - 分享技术与生活</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Quill 富文本编辑器 -->
+	<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+	<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+	<!-- HTML 清理库（防止 XSS） -->
+	<script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-feather-alt"></i>
+                <span>远眺的卧狮</span>
+            </div>
+            <div class="nav-links">
+                <a href="/" class="active"><i class="fas fa-home"></i> 首页</a>
+                <a id="writeLink" href="javascript:void(0)" style="display:none;"><i class="fas fa-pen"></i> 写文章</a>
+                <a id="profileLink" href="/profile.html" style="display:none;"><i class="fas fa-user"></i> 我的</a>
+                <a id="loginLink" href="javascript:void(0)"><i class="fas fa-sign-in-alt"></i> 登录</a>
+                <a id="registerLink" href="javascript:void(0)"><i class="fas fa-user-plus"></i> 注册</a>
+                <a id="logoutLink" href="javascript:void(0)" style="display:none;"><i class="fas fa-sign-out-alt"></i> 退出</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 英雄区域 Hero Section -->
+    <section class="hero-section">
+        <div class="hero-overlay"></div>
+        <div class="hero-container">
+            <!--<div class="hero-badge">
+                <i class="fas fa-feather-alt"></i> 用心记录
+            </div>-->
+            <h1 class="hero-title">分享思考<span class="hero-dot">·</span>连接世界</h1>
+            <p class="hero-subtitle">在这里，我们用文字记录生活，用思考照亮前路</p>
+            <div class="hero-buttons">
+                <a id="heroWriteBtn" href="javascript:void(0)" class="hero-btn-primary" style="display:none;">
+                    <i class="fas fa-pen-fancy"></i> 开始写作
+                </a>
+                <a href="#content" class="hero-btn-secondary">
+                    <i class="fas fa-arrow-down"></i> 探索文章
+                </a>
+            </div>
+        </div>
+        <div class="hero-wave">
+            <!--<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 90">
+                <path fill="#ffffff" d="M0,64L80,69.3C160,75,320,85,480,80C640,75,800,53,960,48C1120,43,1280,53,1360,58.7L1440,64L1440,120L1360,120C1280,120,1120,120,960,120C800,120,640,120,480,120C320,120,160,120,80,120L0,120Z"></path>
+            </svg>-->
+            <svg id="visual" viewBox="0 0 1400 180" width="1400" height="180" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"><path d="M0 102L117 41L233 106L350 66L467 134L583 76L700 110L817 29L933 79L1050 112L1167 123L1283 58L1400 135L1400 181L1283 181L1167 181L1050 181L933 181L817 181L700 181L583 181L467 181L350 181L233 181L117 181L0 181Z" fill="#c7e3bf"></path><path d="M0 68L117 73L233 49L350 84L467 52L583 41L700 129L817 112L933 120L1050 63L1167 50L1283 133L1400 88L1400 181L1283 181L1167 181L1050 181L933 181L817 181L700 181L583 181L467 181L350 181L233 181L117 181L0 181Z" fill="#afd5a3"></path><path d="M0 100L117 96L233 96L350 111L467 146L583 69L700 90L817 148L933 102L1050 110L1167 100L1283 56L1400 144L1400 181L1283 181L1167 181L1050 181L933 181L817 181L700 181L583 181L467 181L350 181L233 181L117 181L0 181Z" fill="#96c688"></path><path d="M0 132L117 102L233 143L350 134L467 122L583 86L700 90L817 143L933 105L1050 117L1167 122L1283 118L1400 148L1400 181L1283 181L1167 181L1050 181L933 181L817 181L700 181L583 181L467 181L350 181L233 181L117 181L0 181Z" fill="#7eb86d"></path><path d="M0 151L117 139L233 118L350 158L467 108L583 143L700 120L817 151L933 139L1050 128L1167 134L1283 146L1400 149L1400 181L1283 181L1167 181L1050 181L933 181L817 181L700 181L583 181L467 181L350 181L233 181L117 181L0 181Z" fill="#65aa52"></path><path d="M0 165L117 128L233 152L350 160L467 155L583 151L700 157L817 119L933 159L1050 129L1167 151L1283 165L1400 146L1400 181L1283 181L1167 181L1050 181L933 181L817 181L700 181L583 181L467 181L350 181L233 181L117 181L0 181Z" fill="#4b9b35"></path><path d="M0 144L117 168L233 145L350 154L467 143L583 155L700 171L817 168L933 144L1050 156L1167 152L1283 173L1400 151L1400 181L1283 181L1167 181L1050 181L933 181L817 181L700 181L583 181L467 181L350 181L233 181L117 181L0 181Z" fill="#2c8d12"></path></svg>
+        </div>
+    </section>
+
+    <!-- 主内容 -->
+    <main class="main-content" id="content">
+        <div class="container">
+            <!-- 搜索栏 -->
+            <div class="search-card">
+                <div class="search-wrapper">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="searchInput" class="search-input" placeholder="搜索文章标题或内容...">
+                    <button id="searchBtn" class="search-btn">搜索</button>
+                </div>
+                <div id="searchInfo" class="search-info" style="display:none;">
+                    <span><i class="fas fa-chart-line"></i> 找到 <strong id="searchCount">0</strong> 篇相关文章</span>
+                    <a href="#" id="backToAll"><i class="fas fa-times"></i> 清除筛选</a>
+                </div>
+            </div>
+
+            <!-- 分类筛选 -->
+            <div class="categories-bar">
+                <div class="categories-scroll" id="categoriesScroll"></div>
+            </div>
+
+            <!-- 文章列表 -->
+            <div id="postsContainer">
+                <div class="loading-spinner">
+                    <i class="fas fa-spinner fa-pulse"></i>
+                    <p>加载中...</p>
+                </div>
+            </div>
+
+            <!-- 分页 -->
+            <div id="pagination" class="pagination-container"></div>
+        </div>
+    </main>
+
+    <footer class="footer">
+	    <div class="container">
+	        <div class="footer-content">
+	            <div class="footer-info">
+	                <div class="footer-logo">
+	                    <i class="fas fa-feather-alt"></i>
+	                    <span>远眺的卧狮</span>
+	                </div>
+	                <p>分享思考·连接世界</p>
+	            </div>
+	            <div class="footer-links">
+	                <a href="#"><i class="fab fa-github"></i></a>
+	                <a href="#"><i class="fab fa-twitter"></i></a>
+	                <a href="#"><i class="fas fa-rss"></i></a>
+	            </div>
+	        </div>
+	        <div class="footer-bottom">
+	            <p>&copy; 2024 远眺的卧狮 | 分享有价值的思想</p>
+	        </div>
+	    </div>
+	</footer>
+
+    <!-- 写文章模态框 -->
+    <div id="postModal" class="modal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h3><i class="fas fa-feather-alt"></i> 写新文章</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label><i class="fas fa-heading"></i> 文章标题</label>
+                    <input type="text" id="postTitle" placeholder="给文章起一个吸引人的标题...">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label><i class="fas fa-tag"></i> 选择分类</label>
+                        <select id="postCategory">
+                            <option value="">未分类</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- 富文本编辑器容器 -->
+				<div class="form-group">
+				    <label><i class="fas fa-align-left"></i> 文章内容</label>
+				    <div id="editorContainer" style="height: 200px; margin-bottom: 1rem; background: white;"></div>
+				    <input type="hidden" id="postContent">
+				    <div id="uploadProgress" class="upload-progress" style="display:none;">
+				        <div class="upload-progress-bar"><div id="uploadProgressFill" class="upload-progress-fill"></div></div>
+				        <p id="uploadStatus" class="upload-status">上传中...</p>
+				    </div>
+				</div>
+                <div class="modal-buttons">
+                    <button id="publishBtn" class="btn-publish"><i class="fas fa-paper-plane"></i> 发布文章</button>
+                    <button id="cancelPostBtn" class="btn-secondary">取消</button>
+                </div>
+                <div id="postMessage" class="message"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 登录模态框 -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-sign-in-alt"></i> 欢迎回来</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label><i class="fas fa-envelope"></i> 邮箱</label>
+                    <input type="email" id="loginEmail" placeholder="your@email.com">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-lock"></i> 密码</label>
+                    <input type="password" id="loginPassword" placeholder="••••••••">
+                </div>
+                <div class="modal-buttons">
+                    <button id="loginSubmitBtn" class="btn-primary">登录</button>
+                </div>
+                <div id="loginMessage" class="message"></div>
+                <div class="modal-footer">
+                    还没有账号？ <a href="#" id="switchToRegister">立即注册</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 注册模态框 -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-user-plus"></i> 创建账号</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label><i class="fas fa-user"></i> 用户名</label>
+                    <input type="text" id="regUsername" placeholder="用户名至少3个字符">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-envelope"></i> 邮箱</label>
+                    <input type="email" id="regEmail" placeholder="your@email.com">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-lock"></i> 密码</label>
+                    <input type="password" id="regPassword" placeholder="密码至少6个字符">
+                </div>
+                <div class="modal-buttons">
+                    <button id="registerSubmitBtn" class="btn-primary">注册</button>
+                </div>
+                <div id="registerMessage" class="message"></div>
+                <div class="modal-footer">
+                    已有账号？ <a href="#" id="switchToLogin">立即登录</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/blog-config.js"></script>
+    <script src="/js/main.js"></script>
+</body>
+</html>

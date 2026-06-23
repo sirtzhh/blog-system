@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>后台管理 - 卧狮博客</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .admin-container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+        .admin-header { margin-bottom: 2rem; }
+        .admin-tabs { display: flex; gap: 1rem; border-bottom: 1px solid #e5e7eb; margin-bottom: 2rem; flex-wrap: wrap; }
+        .tab-btn { padding: 0.75rem 1.5rem; background: none; border: none; cursor: pointer; font-size: 1rem; color: #6b7280; transition: all 0.2s; }
+        .tab-btn:hover { color: #5f43b2; }
+        .tab-btn.active { color: #5f43b2; border-bottom: 2px solid #5f43b2; }
+        .tab-pane { display: none; }
+        .tab-pane.active { display: block; }
+        .data-table { width: 100%; border-collapse: collapse; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .data-table th, .data-table td { padding: 12px; text-align: left; border-bottom: 1px solid #e5e7eb; }
+        .data-table th { background: #f9fafb; font-weight: 600; }
+        .form-card { background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 2rem; }
+        .form-card h3 { margin-bottom: 1rem; font-size: 1.1rem; }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
+        .form-group input, .form-group select { width: 100%; padding: 0.5rem; border: 1px solid #e5e7eb; border-radius: 6px; }
+        .btn { padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; border: none; font-size: 0.85rem; }
+        .btn-primary { background: #5f43b2; color: white; }
+        .btn-primary:hover { background: #4a3491; }
+        .btn-danger { background: #dc2626; color: white; }
+        .btn-danger:hover { background: #b91c1c; }
+        .btn-warning { background: #f59e0b; color: white; }
+        .btn-warning:hover { background: #d97706; }
+        .btn-sm { padding: 0.25rem 0.5rem; font-size: 0.75rem; }
+        .message { margin-top: 1rem; padding: 0.75rem; border-radius: 6px; display: none; }
+        .message.success { background: #d1fae5; color: #065f46; display: block; }
+        .message.error { background: #fee2e2; color: #991b1b; display: block; }
+        .warning { background: #fef3c7; padding: 0.75rem; border-radius: 8px; margin-top: 1rem; font-size: 0.85rem; }
+        .action-buttons { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        .badge { display: inline-block; padding: 0.2rem 0.5rem; border-radius: 20px; font-size: 0.7rem; font-weight: 500; }
+        .badge-admin { background: #d1fae5; color: #065f46; }
+        .badge-user { background: #e5e7eb; color: #374151; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><i class="fas fa-cog"></i><span>后台管理</span></div>
+            <div class="nav-links">
+                <a href="/">返回首页</a>
+                <a id="logoutLink" href="#">退出</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1>系统管理</h1>
+            <p>管理用户、分类和博客配置</p>
+        </div>
+        
+        <div class="admin-tabs">
+            <button class="tab-btn active" data-tab="users">👥 用户管理</button>
+            <button class="tab-btn" data-tab="categories">📁 分类管理</button>
+            <button class="tab-btn" data-tab="config">⚙️ 博客配置</button>
+        </div>
+
+        <!-- ==================== 用户管理 ==================== -->
+        <div id="usersTab" class="tab-pane active">
+            <div class="form-card">
+                <h3>➕ 添加新用户</h3>
+                <div class="form-group">
+                    <label>用户名</label>
+                    <input type="text" id="newUsername" placeholder="用户名">
+                </div>
+                <div class="form-group">
+                    <label>邮箱</label>
+                    <input type="email" id="newEmail" placeholder="邮箱">
+                </div>
+                <div class="form-group">
+                    <label>密码</label>
+                    <input type="password" id="newPassword" placeholder="密码（默认123456）">
+                </div>
+                <button id="addUserBtn" class="btn btn-primary">添加用户</button>
+                <div id="addUserMsg" class="message"></div>
+            </div>
+
+            <div class="form-card">
+                <h3>📋 用户列表</h3>
+                <div id="usersList">加载中...</div>
+            </div>
+        </div>
+
+        <!-- ==================== 分类管理 ==================== -->
+        <div id="categoriesTab" class="tab-pane">
+            <div class="form-card">
+                <h3>➕ 添加分类</h3>
+                <div class="form-group">
+                    <label>分类名称</label>
+                    <input type="text" id="newCategoryName" placeholder="例如：前端开发">
+                </div>
+                <button id="addCategoryBtn" class="btn btn-primary">添加分类</button>
+                <div id="addCategoryMsg" class="message"></div>
+            </div>
+
+            <div class="form-card">
+                <h3>📁 分类列表</h3>
+                <div id="categoriesList">加载中...</div>
+            </div>
+        </div>
+
+        <!-- ==================== 博客配置 ==================== -->
+        <div id="configTab" class="tab-pane">
+            <div class="form-card">
+                <h3>⚙️ 博客配置</h3>
+                <div class="form-group">
+                    <label>博客名称</label>
+                    <input type="text" id="blogName" placeholder="博客名称">
+                </div>
+                <div class="form-group">
+                    <label>博客标语</label>
+                    <input type="text" id="blogSubtitle" placeholder="博客标语">
+                </div>
+                <div class="form-group">
+                    <label>图标样式 (Font Awesome)</label>
+                    <input type="text" id="blogLogo" placeholder="fas fa-feather-alt">
+                    <div class="warning" style="margin-top:0.5rem;">常用图标：fas fa-feather-alt, fas fa-blog, fas fa-pen-nib, fas fa-book</div>
+                </div>
+                <div class="form-group">
+                    <label>页脚文字</label>
+                    <input type="text" id="blogFooter" placeholder="页脚文字">
+                </div>
+                <button id="saveConfigBtn" class="btn btn-primary">保存配置</button>
+                <div id="configMsg" class="message"></div>
+                <div class="warning">
+                    <i class="fas fa-info-circle"></i> 修改配置后需要重启服务器才能生效
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/blog-config.js"></script>
+    <script>
+        let token = localStorage.getItem('token');
+
+        // API 请求封装
+        async function api(method, url, data = null) {
+            const options = { 
+                method, 
+                headers: { 'Authorization': 'Bearer ' + token }
+            };
+            if (data) {
+                options.headers['Content-Type'] = 'application/json';
+                options.body = JSON.stringify(data);
+            }
+            const res = await fetch(url, options);
+            return res.json();
+        }
+
+        // 检查管理员权限
+        async function checkAdmin() {
+            if (!token) { 
+                window.location.href = '/'; 
+                return false; 
+            }
+            try {
+                const res = await fetch('/api/user/profile', { 
+                    headers: { 'Authorization': 'Bearer ' + token } 
+                });
+                const data = await res.json();
+                if (data.success && data.user.role === 'admin') {
+                    return true;
+                }
+                alert('需要管理员权限');
+                window.location.href = '/';
+                return false;
+            } catch(e) { 
+                window.location.href = '/'; 
+                return false; 
+            }
+        }
+
+        // ==================== 用户管理 ====================
+        
+        async function loadUsers() {
+            const data = await api('GET', '/api/admin/users');
+            if (data.success) {
+                const html = `
+                    <table class="data-table">
+                        <thead>
+                            <tr><th>ID</th><th>用户名</th><th>邮箱</th><th>角色</th><th>注册时间</th><th>操作</th</tr>
+                        </thead>
+                        <tbody>
+                            ${data.data.map(u => `
+                                <tr>
+                                    <td>${u.id}</td>
+                                    <td>${escapeHtml(u.username)}</td>
+                                    <td>${escapeHtml(u.email)}</td>
+                                    <td>
+                                        <select onchange="changeRole(${u.id}, this.value)" style="padding:4px 8px; border-radius:4px;">
+                                            <option value="user" ${u.role === 'user' ? 'selected' : ''}>普通用户</option>
+                                            <option value="admin" ${u.role === 'admin' ? 'selected' : ''}>管理员</option>
+                                        </select>
+                                    </td>
+                                    <td>${new Date(u.created_at).toLocaleDateString()}</td>
+                                    <td class="action-buttons">
+                                        <button class="btn btn-warning btn-sm" onclick="resetPassword(${u.id}, '${escapeHtml(u.username)}')">
+                                            🔑 重置密码
+                                        </button>
+                                        <button class="btn btn-danger btn-sm" onclick="deleteUser(${u.id}, '${escapeHtml(u.username)}')">
+                                            🗑️ 删除
+                                        </button>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+                document.getElementById('usersList').innerHTML = html;
+            } else {
+                document.getElementById('usersList').innerHTML = '<p style="color:red;">加载失败</p>';
+            }
+        }
+
+        // 修改用户角色
+        window.changeRole = async (id, role) => {
+            const result = await api('PUT', `/api/admin/users/${id}/role`, { role });
+            if (result.success) {
+                showMessage('用户角色已更新', 'success');
+                loadUsers();
+            } else {
+                showMessage(result.message, 'error');
+            }
+        };
+
+        // 删除用户
+        window.deleteUser = async (id, username) => {
+            if (confirm(`确定要删除用户 "${username}" 吗？此操作不可恢复！`)) {
+                const result = await api('DELETE', `/api/admin/users/${id}`);
+                if (result.success) {
+                    showMessage(`用户 "${username}" 已删除`, 'success');
+                    loadUsers();
+                } else {
+                    showMessage(result.message, 'error');
+                }
+            }
+        };
+
+        // 重置密码（设置为 123456）
+        window.resetPassword = async (id, username) => {
+            if (confirm(`确定要将用户 "${username}" 的密码重置为 123456 吗？`)) {
+                const result = await api('PUT', `/api/admin/users/${id}/password`, { password: '123456' });
+                if (result.success) {
+                    showMessage(`用户 "${username}" 的密码已重置为 123456`, 'success');
+                } else {
+                    showMessage(result.message, 'error');
+                }
+            }
+        };
+
+        // 添加用户
+        document.getElementById('addUserBtn')?.addEventListener('click', async () => {
+            const username = document.getElementById('newUsername').value.trim();
+            const email = document.getElementById('newEmail').value.trim();
+            let password = document.getElementById('newPassword').value;
+            const msgDiv = document.getElementById('addUserMsg');
+            
+            if (!username || !email) {
+                msgDiv.innerHTML = '请填写用户名和邮箱';
+                msgDiv.className = 'message error';
+                return;
+            }
+            
+            if (!password) password = '123456';
+            
+            const result = await api('POST', '/api/auth/register', { username, email, password });
+            if (result.success) {
+                msgDiv.innerHTML = `用户 "${username}" 添加成功！密码：${password}`;
+                msgDiv.className = 'message success';
+                document.getElementById('newUsername').value = '';
+                document.getElementById('newEmail').value = '';
+                document.getElementById('newPassword').value = '';
+                loadUsers();
+                setTimeout(() => { msgDiv.className = 'message'; msgDiv.innerHTML = ''; }, 3000);
+            } else {
+                msgDiv.innerHTML = result.message;
+                msgDiv.className = 'message error';
+            }
+        });
+
+        // ==================== 分类管理 ====================
+        
+        async function loadCategories() {
+            const data = await api('GET', '/api/admin/categories');
+            if (data.success) {
+                const html = `
+                    <table class="data-table">
+                        <thead><tr><th>ID</th><th>分类名称</th><th>操作</th></tr></thead>
+                        <tbody>
+                            ${data.data.map(c => `
+                                <tr>
+                                    <td>${c.id}</td>
+                                    <td>${escapeHtml(c.name)}</td>
+                                    <td>
+                                        <button class="btn btn-danger btn-sm" onclick="deleteCategory(${c.id}, '${escapeHtml(c.name)}')">
+                                            🗑️ 删除
+                                        </button>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+                document.getElementById('categoriesList').innerHTML = html;
+            }
+        }
+
+        window.deleteCategory = async (id, name) => {
+            if (confirm(`确定要删除分类 "${name}" 吗？`)) {
+                const result = await api('DELETE', `/api/admin/categories/${id}`);
+                if (result.success) {
+                    showMessage(`分类 "${name}" 已删除`, 'success');
+                    loadCategories();
+                } else {
+                    showMessage(result.message, 'error');
+                }
+            }
+        };
+
+        document.getElementById('addCategoryBtn')?.addEventListener('click', async () => {
+            const name = document.getElementById('newCategoryName').value.trim();
+            const msgDiv = document.getElementById('addCategoryMsg');
+            
+            if (!name) {
+                msgDiv.innerHTML = '请输入分类名称';
+                msgDiv.className = 'message error';
+                return;
+            }
+            
+            const result = await api('POST', '/api/admin/categories', { name });
+            if (result.success) {
+                msgDiv.innerHTML = `分类 "${name}" 添加成功`;
+                msgDiv.className = 'message success';
+                document.getElementById('newCategoryName').value = '';
+                loadCategories();
+                setTimeout(() => { msgDiv.className = 'message'; msgDiv.innerHTML = ''; }, 2000);
+            } else {
+                msgDiv.innerHTML = result.message;
+                msgDiv.className = 'message error';
+            }
+        });
+
+        // ==================== 博客配置 ====================
+        
+        async function loadConfig() {
+            const data = await api('GET', '/api/admin/config');
+            if (data.success) {
+                document.getElementById('blogName').value = data.data.BLOG_NAME || '';
+                document.getElementById('blogSubtitle').value = data.data.BLOG_SUBTITLE || '';
+                document.getElementById('blogLogo').value = data.data.BLOG_LOGO || 'fas fa-feather-alt';
+                document.getElementById('blogFooter').value = data.data.BLOG_FOOTER || '';
+            }
+        }
+
+        document.getElementById('saveConfigBtn')?.addEventListener('click', async () => {
+            const config = {
+                BLOG_NAME: document.getElementById('blogName').value,
+                BLOG_SUBTITLE: document.getElementById('blogSubtitle').value,
+                BLOG_LOGO: document.getElementById('blogLogo').value,
+                BLOG_FOOTER: document.getElementById('blogFooter').value
+            };
+            
+            const result = await api('PUT', '/api/admin/config', config);
+            const msgDiv = document.getElementById('configMsg');
+            
+            if (result.success) {
+                msgDiv.innerHTML = '✅ 配置已保存，请重启服务器生效！';
+                msgDiv.className = 'message success';
+            } else {
+                msgDiv.innerHTML = '❌ 保存失败：' + result.message;
+                msgDiv.className = 'message error';
+            }
+        });
+
+        // ==================== 工具函数 ====================
+        
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function showMessage(message, type) {
+            // 创建临时消息提示
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `message ${type}`;
+            msgDiv.innerHTML = message;
+            msgDiv.style.position = 'fixed';
+            msgDiv.style.top = '20px';
+            msgDiv.style.right = '20px';
+            msgDiv.style.zIndex = '9999';
+            msgDiv.style.maxWidth = '300px';
+            document.body.appendChild(msgDiv);
+            setTimeout(() => msgDiv.remove(), 3000);
+        }
+
+        // ==================== 标签页切换 ====================
+        
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById(btn.dataset.tab + 'Tab').classList.add('active');
+                
+                if (btn.dataset.tab === 'users') loadUsers();
+                if (btn.dataset.tab === 'categories') loadCategories();
+                if (btn.dataset.tab === 'config') loadConfig();
+            });
+        });
+
+        // 退出登录
+        document.getElementById('logoutLink')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('token');
+            window.location.href = '/';
+        });
+
+        // ==================== 初始化 ====================
+        
+        (async () => {
+            const isAdmin = await checkAdmin();
+            if (isAdmin) {
+                loadUsers();
+                loadCategories();
+                loadConfig();
+            }
+        })();
+    </script>
+</body>
+</html>

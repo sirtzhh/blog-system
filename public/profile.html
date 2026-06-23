@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>个人资料 - 卧狮博客</title>
+		<link rel="stylesheet" href="/css/style.css">
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	</head>
+
+	<body>
+		<nav class="navbar">
+			<div class="nav-container">
+				<div class="logo">
+					<i class="fas fa-feather-alt"></i>
+					<span>卧狮博客</span>
+				</div>
+				<div class="nav-links">
+					<a href="/"><i class="fas fa-home"></i> 首页</a>
+					<a href="/profile" class="active"><i class="fas fa-user"></i> 我的资料</a>
+					<a id="logoutLink" href="#"><i class="fas fa-sign-out-alt"></i> 退出</a>
+				</div>
+			</div>
+		</nav>
+
+		<main class="main-content">
+			<div class="container">
+				<div class="profile-container">
+					<div class="profile-card">
+						<div class="profile-header">
+							<div class="avatar-section">
+								<div class="avatar-wrapper">
+									<img id="avatar" src="/uploads/avatars/default.png" alt="头像">
+									<div class="avatar-upload-btn">
+										<label for="avatarInput">
+                                        <i class="fas fa-camera"></i>
+                                    </label>
+									</div>
+								</div>
+								<input type="file" id="avatarInput" accept="image/*" style="display:none">
+								<div id="avatarMessage" class="message-small"></div>
+							</div>
+							<h2 id="username"></h2>
+							<p id="email"></p>
+							<p class="member-since">加入时间：<span id="createdAt"></span></p>
+						</div>
+
+						<div class="profile-info">
+							<div class="bio-container">
+								<div class="bio-label">
+									<i class="fas fa-edit"></i> 个人简介
+								</div>
+								<textarea id="bio" class="bio-textarea" rows="4" placeholder="介绍一下你自己..."></textarea>
+								<div class="bio-counter">
+									<span id="bioCount">0</span> / 200 字符
+								</div>
+							</div>
+
+							<div style="margin-top: 1.5rem;">
+							<button id="saveProfileBtn" class="btn-save">
+					            <i class="fas fa-save"></i> 保存修改
+					        </button>
+							</div>
+
+							<div id="profileMessage" class="message"></div>
+
+							<!-- 统计信息（可选） -->
+							<div class="stats-card">
+								<div class="stat-item">
+									<div class="stat-number" id="postCount">0</div>
+									<div class="stat-label">发表文章</div>
+								</div>
+								<div class="stat-item">
+									<div class="stat-number" id="commentCount">0</div>
+									<div class="stat-label">获得评论</div>
+								</div>
+								<div class="stat-item">
+									<div class="stat-number" id="viewCount">0</div>
+									<div class="stat-label">总阅读量</div>
+								</div>
+							</div>
+							
+							
+							<!-- 修改密码 -->
+							<div class="password-section">
+							    <div class="password-header">
+							        <i class="fas fa-lock"></i>
+							        <h3>修改密码</h3>
+							    </div>
+							    
+							    <div class="password-form">
+							        <div class="form-group">
+							            <label><i class="fas fa-key"></i> 原密码</label>
+							            <input type="password" id="oldPassword" placeholder="请输入原密码">
+							        </div>
+							        <div class="form-group">
+							            <label><i class="fas fa-key"></i> 新密码</label>
+							            <input type="password" id="newPassword" placeholder="请输入新密码（至少6位）">
+							        </div>
+							        <div class="form-group">
+							            <label><i class="fas fa-key"></i> 确认新密码</label>
+							            <input type="password" id="confirmPassword" placeholder="请再次输入新密码">
+							        </div>
+							        <button id="changePasswordBtn" class="btn-save" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+							            <i class="fas fa-sync-alt"></i> 修改密码
+							        </button>
+							        <div id="passwordMessage" class="message"></div>
+							    </div>
+							</div>
+							
+							
+							
+							
+							
+							
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</main>
+
+		<footer class="footer">
+			<div class="container">
+				<div class="footer-bottom">
+					<p>&copy; 2024 卧狮博客 | 分享有价值的思想</p>
+				</div>
+			</div>
+		</footer>
+		<script src="/js/blog-config.js"></script>
+		<script src="/js/profile.js"></script>
+	</body>
+
+</html>

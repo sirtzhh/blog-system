@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文章详情 - 卧狮博客</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <!-- Quill 富文本编辑器 -->
+	<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+	<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-feather-alt"></i>
+                <span>卧狮博客</span>
+            </div>
+            <div class="nav-links">
+                <a href="/"><i class="fas fa-home"></i> 首页</a>
+                <a id="writeLink" href="javascript:void(0)"><i class="fas fa-pen"></i> 写文章</a>
+                <a id="profileLink" href="/profile.html"><i class="fas fa-user"></i> 我的</a>
+                <a id="loginLink" href="javascript:void(0)"><i class="fas fa-sign-in-alt"></i> 登录</a>
+                <a id="registerLink" href="javascript:void(0)"><i class="fas fa-user-plus"></i> 注册</a>
+                <a id="logoutLink" href="javascript:void(0)"><i class="fas fa-sign-out-alt"></i> 退出</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主内容 -->
+    <main class="main-content">
+        <div class="container">
+            <a href="/" class="back-link"><i class="fas fa-arrow-left"></i> 返回首页</a>
+            
+            <div id="postContainer" class="post-detail-card">
+                <div class="loading-spinner"><i class="fas fa-spinner fa-pulse"></i> 加载中...</div>
+            </div>
+            
+            <div id="commentsSection" class="comments-section">
+                <div class="loading-spinner"><i class="fas fa-spinner fa-pulse"></i> 加载评论...</div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 卧狮博客 | 分享有价值的思想</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 编辑模态框 -->
+    <div id="editModal" class="modal edit-modal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h3><i class="fas fa-edit"></i> 编辑文章</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>文章标题</label>
+                    <input type="text" id="editTitle" placeholder="文章标题">
+                </div>
+                <div class="form-group">
+                    <label>选择分类</label>
+                    <select id="editCategory">
+                        <option value="">未分类</option>
+                    </select>
+                </div>
+                <div class="form-group">
+				    <label>文章内容</label>
+				    <div id="editEditorContainer" style="height: 200px; margin-bottom: 1rem; background: white;"></div>
+				    <input type="hidden" id="editContent">
+				</div>
+                <div class="modal-buttons">
+                    <button id="saveEditBtn" class="btn-primary">保存修改</button>
+                    <button id="cancelEditBtn" class="btn-secondary">取消</button>
+                </div>
+                <div id="editMessage" class="message"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 登录模态框 -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-sign-in-alt"></i> 登录账号</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>邮箱</label>
+                    <input type="email" id="loginEmail" placeholder="your@email.com">
+                </div>
+                <div class="form-group">
+                    <label>密码</label>
+                    <input type="password" id="loginPassword" placeholder="••••••••">
+                </div>
+                <div class="modal-buttons">
+                    <button id="loginSubmitBtn" class="btn-primary">登录</button>
+                </div>
+                <div id="loginMessage" class="message"></div>
+                <div class="modal-footer">
+                    还没有账号？ <a href="#" id="switchToRegister">立即注册</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 注册模态框 -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-user-plus"></i> 注册新账号</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>用户名</label>
+                    <input type="text" id="regUsername" placeholder="用户名至少3个字符">
+                </div>
+                <div class="form-group">
+                    <label>邮箱</label>
+                    <input type="email" id="regEmail" placeholder="your@email.com">
+                </div>
+                <div class="form-group">
+                    <label>密码</label>
+                    <input type="password" id="regPassword" placeholder="密码至少6个字符">
+                </div>
+                <div class="modal-buttons">
+                    <button id="registerSubmitBtn" class="btn-primary">注册</button>
+                </div>
+                <div id="registerMessage" class="message"></div>
+                <div class="modal-footer">
+                    已有账号？ <a href="#" id="switchToLogin">立即登录</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 图片放大模态框 -->
+	<div id="imageModal" class="image-modal" style="display:none;">
+	    <span class="image-modal-close" onclick="closeImageModal()">&times;</span>
+	    <img class="image-modal-content" id="modalImage">
+	</div>
+	
+	<script src="/js/blog-config.js"></script>
+    <script src="/js/post-detail.js"></script>
+</body>
+</html>
