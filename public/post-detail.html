@@ -76,11 +76,18 @@
                         <option value="">未分类</option>
                     </select>
                 </div>
-                <div class="form-group">
-				    <label>文章内容</label>
-				    <div id="editEditorContainer" style="height: 200px; margin-bottom: 1rem; background: white;"></div>
-				    <input type="hidden" id="editContent">
-				</div>
+				
+                <!-- 富文本编辑器容器 -->
+				<div class="form-group">
+				    <label><i class="fas fa-align-left"></i> 文章内容</label>
+				    <div id="editorContainer" style="height: 200px; margin-bottom: 1rem; background: white;"></div>
+				    <input type="hidden" id="postContent">
+				    <div id="uploadProgress" class="upload-progress" style="display:none;">
+				        <div class="upload-progress-bar"><div id="uploadProgressFill" class="upload-progress-fill"></div></div>
+				        <p id="uploadStatus" class="upload-status">上传中...</p>
+				    </div>
+				</div>				
+				
                 <div class="modal-buttons">
                     <button id="saveEditBtn" class="btn-primary">保存修改</button>
                     <button id="cancelEditBtn" class="btn-secondary">取消</button>
