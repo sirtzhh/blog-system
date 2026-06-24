@@ -266,9 +266,11 @@ function editArchiveHandler() {
 			return;
 		}
 
-		const progressDiv = document.getElementById('uploadProgress');
-		const progressFill = document.getElementById('uploadProgressFill');
-		const statusSpan = document.getElementById('uploadStatus');
+		const progressDiv = document.getElementById('editUploadProgress');
+        const progressFill = document.getElementById('editUploadProgressFill');
+        const statusSpan = document.getElementById('editUploadStatus');
+		
+		
 		progressDiv.style.display = 'block';
 		progressFill.style.width = '30%';
 		statusSpan.textContent = '上传中...';
