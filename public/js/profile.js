@@ -297,7 +297,7 @@ function bindEvents() {
     const avatarInput = document.getElementById('avatarInput');
     
     if (avatarUploadBtn && avatarInput) {
-    	console.log('zhhzhhzhhzhhzhhzhhzhhzhhzhh')
+
     	avatarInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (file) {
@@ -314,11 +314,11 @@ function bindEvents() {
                 uploadAvatar(file);
             }
         });
-    	console.log('aaaaaaaaaaaaaaaaaaaaaaa')
+
         avatarUploadBtn.addEventListener('click', () => {
             avatarInput.click();
         });
-        console.log('bbbbbbbbbbbbbbbbbb')
+
      }
     
     // 退出登录
