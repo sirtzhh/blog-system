@@ -287,27 +287,34 @@ function bindEvents() {
     // 保存资料按钮
     const saveBtn = document.getElementById('saveProfileBtn');
     if (saveBtn) {
+        saveBtn.removeEventListener('click', saveProfile);
         saveBtn.addEventListener('click', saveProfile);
     }
     
-    // 头像上传按钮
+    // 头像上传（使用 cloneNode 避免事件冲突）
     const avatarUploadBtn = document.getElementById('avatarUploadBtn');
     const avatarInput = document.getElementById('avatarInput');
     
     if (avatarUploadBtn && avatarInput) {
-        avatarUploadBtn.addEventListener('click', () => {
-            avatarInput.click();
+        // 克隆节点移除所有旧监听
+        const newUploadBtn = avatarUploadBtn.cloneNode(true);
+        avatarUploadBtn.parentNode.replaceChild(newUploadBtn, avatarUploadBtn);
+        
+        const newInput = avatarInput.cloneNode(true);
+        avatarInput.parentNode.replaceChild(newInput, avatarInput);
+        
+        // 重新绑定
+        newUploadBtn.addEventListener('click', () => {
+            newInput.click();
         });
         
-        avatarInput.addEventListener('change', (e) => {
+        newInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (file) {
-                // 检查文件类型
                 if (!file.type.startsWith('image/')) {
                     alert('请选择图片文件');
                     return;
                 }
-                // 检查文件大小（2MB）
                 if (file.size > 2 * 1024 * 1024) {
                     alert('图片大小不能超过2MB');
                     return;
@@ -320,6 +327,7 @@ function bindEvents() {
     // 退出登录
     const logoutLink = document.getElementById('logoutLink');
     if (logoutLink) {
+        logoutLink.removeEventListener('click', logout);
         logoutLink.addEventListener('click', (e) => {
             e.preventDefault();
             logout();
@@ -327,7 +335,11 @@ function bindEvents() {
     }
     
     // 修改密码
-	document.getElementById('changePasswordBtn')?.addEventListener('click', changePassword);
+    const changePwdBtn = document.getElementById('changePasswordBtn');
+    if (changePwdBtn) {
+        changePwdBtn.removeEventListener('click', changePassword);
+        changePwdBtn.addEventListener('click', changePassword);
+    }
 }
 
 // ========================================
