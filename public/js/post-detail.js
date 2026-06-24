@@ -471,7 +471,21 @@ async function saveEdit() {
 
         if (data.success) {
             showMessage(msgDiv, '保存成功！正在跳转...', true);
-            setTimeout(() => window.location.reload(), 1000);
+            
+            // 获取更新后的文章数据（包含新的 slug）
+            const updatedPost = data.data;
+            
+            // 如果 slug 变化了，跳转到新的 URL
+            if (updatedPost && updatedPost.slug) {
+                setTimeout(() => {
+                    window.location.href = `/post-detail.html?slug=${updatedPost.slug}`;
+                }, 800);
+            } else {
+                // 如果没返回 slug，直接刷新当前页面
+                setTimeout(() => {
+                    window.location.reload();
+                }, 800);
+            }
         } else {
             showMessage(msgDiv, data.message, false);
             saveBtn.disabled = false;
