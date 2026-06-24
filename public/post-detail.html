@@ -7,13 +7,11 @@
     <link rel="stylesheet" href="/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <!-- Quill 富文本编辑器 -->
-	<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-	<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    <!-- HTML 清理 -->
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
 </head>
 <body>
     <!-- 导航栏 -->
@@ -38,11 +36,9 @@
     <main class="main-content">
         <div class="container">
             <a href="/" class="back-link"><i class="fas fa-arrow-left"></i> 返回首页</a>
-            
             <div id="postContainer" class="post-detail-card">
                 <div class="loading-spinner"><i class="fas fa-spinner fa-pulse"></i> 加载中...</div>
             </div>
-            
             <div id="commentsSection" class="comments-section">
                 <div class="loading-spinner"><i class="fas fa-spinner fa-pulse"></i> 加载评论...</div>
             </div>
@@ -58,8 +54,8 @@
         </div>
     </footer>
 
-    <!-- 编辑模态框 -->
-    <div id="editModal" class="modal edit-modal">
+    <!-- ========== 编辑模态框 ========== -->
+    <div id="editModal" class="modal">
         <div class="modal-content modal-lg">
             <div class="modal-header">
                 <h3><i class="fas fa-edit"></i> 编辑文章</h3>
@@ -67,29 +63,29 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label>文章标题</label>
+                    <label><i class="fas fa-heading"></i> 文章标题</label>
                     <input type="text" id="editTitle" placeholder="文章标题">
                 </div>
                 <div class="form-group">
-                    <label>选择分类</label>
+                    <label><i class="fas fa-tag"></i> 选择分类</label>
                     <select id="editCategory">
                         <option value="">未分类</option>
                     </select>
                 </div>
-				
-                <!-- 富文本编辑器容器 -->
-				<div class="form-group">
-				    <label><i class="fas fa-align-left"></i> 文章内容</label>
-				    <div id="#editEditorContainer" style="height: 200px; margin-bottom: 1rem; background: white;"></div>
-				    <input type="hidden" id="editContent">
-				    <div id="editUploadProgress" class="upload-progress" style="display:none;">
-				        <div class="upload-progress-bar"><div id="editUploadProgressFill" class="upload-progress-fill"></div></div>
-				        <p id="editUploadStatus" class="upload-status">上传中...</p>
-				    </div>
-				</div>				
-				
+                <div class="form-group">
+                    <label><i class="fas fa-align-left"></i> 文章内容</label>
+                    <div id="editEditorContainer" style="height: 400px; margin-bottom: 1rem; background: white;"></div>
+                    <input type="hidden" id="editContent">
+                    <!-- 上传进度条 -->
+                    <div id="editUploadProgress" class="upload-progress" style="display:none;">
+                        <div class="upload-progress-bar">
+                            <div id="editUploadProgressFill" class="upload-progress-fill"></div>
+                        </div>
+                        <p id="editUploadStatus" class="upload-status">上传中...</p>
+                    </div>
+                </div>
                 <div class="modal-buttons">
-                    <button id="saveEditBtn" class="btn-primary">保存修改</button>
+                    <button id="saveEditBtn" class="btn-primary"><i class="fas fa-save"></i> 保存修改</button>
                     <button id="cancelEditBtn" class="btn-secondary">取消</button>
                 </div>
                 <div id="editMessage" class="message"></div>
@@ -97,7 +93,7 @@
         </div>
     </div>
 
-    <!-- 登录模态框 -->
+    <!-- ========== 登录模态框 ========== -->
     <div id="loginModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -124,11 +120,11 @@
         </div>
     </div>
 
-    <!-- 注册模态框 -->
+    <!-- ========== 注册模态框 ========== -->
     <div id="registerModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3><i class="fas fa-user-plus"></i> 注册新账号</h3>
+                <h3><i class="fas fa-user-plus"></i> 注册账号</h3>
                 <span class="close">&times;</span>
             </div>
             <div class="modal-body">
@@ -154,13 +150,13 @@
             </div>
         </div>
     </div>
-    
-    <!-- 图片放大模态框 -->
-	<div id="imageModal" class="image-modal" style="display:none;">
-	    <span class="image-modal-close" onclick="closeImageModal()">&times;</span>
-	    <img class="image-modal-content" id="modalImage">
-	</div>
+
+    <!-- ========== 图片放大模态框 ========== -->
+    <div id="imageModal" class="image-modal" style="display:none;">
+        <span class="image-modal-close" onclick="closeImageModal()">&times;</span>
+        <img class="image-modal-content" id="modalImage">
+    </div>
 </body>
-	<script src="/js/blog-config.js"></script>
-    <script src="/js/post-detail.js"></script>
+<script src="/js/blog-config.js"></script>
+<script src="/js/post-detail.js"></script>
 </html>
