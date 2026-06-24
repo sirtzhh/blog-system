@@ -40,53 +40,58 @@ class PostController {
 		}
 	}
 
-	// 获取文章列表（支持分页、分类、搜索）
+	/// 获取文章列表（支持分页、分类、搜索、用户筛选）
 	static async getList(req, res) {
-		const page = parseInt(req.query.page) || 1;
-		const limit = parseInt(req.query.limit) || 10;
-		const categoryId = req.query.category ? parseInt(req.query.category) : null;
-		const keyword = req.query.keyword ? req.query.keyword.trim() : null;
-
-		try {
-			let posts;
-			let total;
-			let categories;
-
-			// 搜索模式
-			if(keyword) {
-				posts = await PostModel.search(keyword, page, limit);
-				total = await PostModel.searchCount(keyword);
-				categories = await CategoryModel.getAll();
-			}
-			// 分类筛选模式
-			else if(categoryId) {
-				posts = await PostModel.getAllPublished(page, limit, categoryId);
-				total = await PostModel.getCount(categoryId);
-				categories = await CategoryModel.getAll();
-			}
-			// 普通模式
-			else {
-				posts = await PostModel.getAllPublished(page, limit);
-				total = await PostModel.getCount();
-				categories = await CategoryModel.getAll();
-			}
-
-			res.json({
-				success: true,
-				data: posts,
-				categories: categories,
-				total: total,
-				page: page,
-				limit: limit,
-				keyword: keyword // 返回搜索关键词，用于前端高亮
-			});
-		} catch(err) {
-			console.error('获取文章列表错误:', err);
-			res.status(500).json({
-				success: false,
-				message: '服务器错误'
-			});
-		}
+	    const page = parseInt(req.query.page) || 1;
+	    const limit = parseInt(req.query.limit) || 10;
+	    const categoryId = req.query.category ? parseInt(req.query.category) : null;
+	    const keyword = req.query.keyword ? req.query.keyword.trim() : null;
+	    const userId = req.query.userId ? parseInt(req.query.userId) : null;  // 关键：接收 userId
+	    
+	    try {
+	        let posts;
+	        let total;
+	        let categories;
+	        
+	        // 按用户筛选（优先级最高）
+	        if (userId) {
+	            posts = await PostModel.getByUserId(userId, page, limit);
+	            total = await PostModel.getCountByUserId(userId);
+	        }
+	        // 搜索模式
+	        else if (keyword) {
+	            posts = await PostModel.search(keyword, page, limit);
+	            total = await PostModel.searchCount(keyword);
+	        }
+	        // 分类筛选模式
+	        else if (categoryId) {
+	            posts = await PostModel.getAllPublished(page, limit, categoryId);
+	            total = await PostModel.getCount(categoryId);
+	        }
+	        // 普通模式
+	        else {
+	            posts = await PostModel.getAllPublished(page, limit);
+	            total = await PostModel.getCount();
+	        }
+	        
+	        categories = await CategoryModel.getAll();
+	        
+	        res.json({ 
+	            success: true, 
+	            data: posts,
+	            categories: categories,
+	            total: total,
+	            page: page,
+	            limit: limit,
+	            keyword: keyword
+	        });
+	    } catch (err) {
+	        console.error('获取文章列表错误:', err);
+	        res.status(500).json({ 
+	            success: false, 
+	            message: '服务器错误：' + err.message 
+	        });
+	    }
 	}
 
 	static async getDetail(req, res) {
