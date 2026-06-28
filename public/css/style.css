@@ -867,6 +867,7 @@ body {
 
 .post-content img {
     max-width: 100%;
+    height: auto;        /* 保持宽高比 */
     border-radius: 8px;
     margin: 1rem 0;
     cursor: pointer;
