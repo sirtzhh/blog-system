@@ -25,6 +25,33 @@ const postModal = document.getElementById('postModal');
 const loginModal = document.getElementById('loginModal');
 const registerModal = document.getElementById('registerModal');
 
+
+// ========================================
+// 注册 Quill 自定义视频格式
+// ========================================
+const BlockEmbed = Quill.import('blots/block/embed');
+
+class VideoBlot extends BlockEmbed {
+    static blotName = 'video';
+    static tagName = 'video';
+
+    static create(value) {
+        const node = super.create(value);
+        node.setAttribute('src', value);
+        node.setAttribute('controls', 'true');
+        node.setAttribute('width', '100%');
+        node.style.maxHeight = '400px';
+        return node;
+    }
+
+    static value(node) {
+        return node.getAttribute('src');
+    }
+}
+
+Quill.register(VideoBlot);
+
+
 // 初始化富文本编辑器
 function initQuill() {
     if (quillInitialized && quill) {

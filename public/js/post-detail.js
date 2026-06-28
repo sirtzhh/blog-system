@@ -195,6 +195,36 @@ async function deletePost() {
 // ========================================
 // 编辑文章 - Quill 编辑器
 // ========================================
+
+// 1. 引入 Quill 的核心模块
+const BlockEmbed = Quill.import('blots/block/embed');
+
+// 2. 定义一个“视频格式”类，让它继承自 BlockEmbed
+class VideoBlot extends BlockEmbed {
+    // 告诉 Quill，这个格式对应的 HTML 标签是 video
+    static blotName = 'video';
+    static tagName = 'video';
+
+    // 这个方法用于从 DOM 元素创建数据
+    static create(value) {
+        const node = super.create(value);
+        node.setAttribute('src', value);
+        node.setAttribute('controls', 'true');
+        node.setAttribute('width', '100%');
+        node.style.maxHeight = '400px';
+        return node;
+    }
+
+    // 这个方法用于从数据获取 HTML 值
+    static value(node) {
+        return node.getAttribute('src');
+    }
+}
+
+// 3. 将自定义的 VideoBlot 注册到 Quill 中
+Quill.register(VideoBlot);
+
+
 function initEditQuill(content) {
     if (editQuillInitialized && editQuill) {
         if (content) {
