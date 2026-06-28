@@ -165,8 +165,8 @@ function imageHandler() {
         const file = input.files[0];
         if (!file) return;
         
-        if (file.size > 5 * 1024 * 1024) {
-            alert('图片大小不能超过5MB');
+        if (file.size > 10 * 1024 * 1024) {
+            alert('图片大小不能超过10MB');
             return;
         }
         
@@ -221,8 +221,8 @@ function videoHandler() {
         const file = input.files[0];
         if (!file) return;
         
-        if (file.size > 50 * 1024 * 1024) {
-            alert('视频大小不能超过50MB');
+        if (file.size > 100 * 1024 * 1024) {
+            alert('视频大小不能超过100MB');
             return;
         }
         
@@ -250,8 +250,10 @@ function videoHandler() {
                 
                 const range = quill.getSelection();
                 const index = range ? range.index : 0;
-                const videoHtml = `<video controls style="max-width:100%; max-height:400px;"><source src="${data.url}" type="${file.type}">您的浏览器不支持视频播放</video>`;
-                quill.clipboard.dangerouslyPasteHTML(index, videoHtml);
+                //const videoHtml = `<video controls style="max-width:100%; max-height:400px;"><source src="${data.url}" type="${file.type}">您的浏览器不支持视频播放</video>`;
+                //quill.clipboard.dangerouslyPasteHTML(index, videoHtml);
+                quill.insertEmbed(index, 'video', data.url);
+    			quill.setSelection(index + 1, 0);
                 
                 setTimeout(() => {
                     if (progressDiv) progressDiv.style.display = 'none';
